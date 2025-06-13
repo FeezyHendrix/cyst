@@ -1,0 +1,56 @@
+version: "3.9"
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  reverse-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config.json:/app/config.json 
+      - ./static:/app/static
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  product-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.product-service
+    ports:
+      - "5002:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    networks:
+      - app-network
+
+  another-product-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.product-service
+    ports:
+      - "5003:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    networks:
+      - app-network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.authgateway.service
+    ports:
+      - "5004:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - app-network

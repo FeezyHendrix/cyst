@@ -1,0 +1,63 @@
+{
+  "name": "cyst",
+  "version": "1.0.0",
+  "description": "A lightweight, high-performance reverse proxy server built with TypeScript and Bun",
+  "main": "dist/index.js",
+  "module": "src/index.ts",
+  "type": "module",
+  "bin": {
+    "cyst": "./dist/index.js"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*",
+    "examples/**/*",
+    "README.md",
+    "ARCHITECTURE.md"
+  ],
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun --minify",
+    "prepublishOnly": "bun run build",
+    "test": "echo \"Tests not implemented yet\" && exit 1"
+  },
+  "keywords": [
+    "cyst",
+    "reverse-proxy",
+    "load-balancer",
+    "proxy",
+    "http",
+    "https",
+    "websocket",
+    "typescript",
+    "bun",
+    "lightweight",
+    "high-performance"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "homepage": "https://github.com/yourusername/cyst#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/cyst.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/cyst/issues"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/ws": "^8.5.10"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "bun": ">=1.0.0",
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}

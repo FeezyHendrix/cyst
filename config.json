@@ -1,0 +1,78 @@
+{
+  "port": 8080,
+  "staticDir": "./static",
+  "security": {
+    "basicAuth": {
+      "username": "admin",
+      "password": "secure123"
+    },
+    "ipWhitelist": ["127.0.0.1", "192.168.1.0/24"],
+    "cors": {
+      "origins": ["*"],
+      "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      "headers": ["Content-Type", "Authorization"]
+    }
+  },
+  "loadBalancer": {
+    "algorithm": "round-robin",
+    "healthCheck": {
+      "enabled": true,
+      "interval": 30000,
+      "timeout": 5000,
+      "path": "/health"
+    }
+  },
+  "logging": {
+    "accessLog": true,
+    "errorLog": true,
+    "format": "combined"
+  },
+  "compression": true,
+  "cache": {
+    "enabled": true,
+    "maxAge": 300000
+  },
+  "rateLimit": {
+    "enabled": true,
+    "windowMs": 60000,
+    "max": 100
+  },
+  "timeout": 30000,
+  "retries": 2,
+  "routes": [
+    {
+      "path": "/api/products",
+      "targets": [
+        {"url": "http://product-service:3001", "weight": 2},
+        {"url": "http://another-product-service:3001", "weight": 1}
+      ],
+      "cors": true,
+      "cache": true
+    },
+    {
+      "host": "api.localhost",
+      "targets": [
+        {"url": "http://api-backend:4000"}
+      ],
+      "cors": true,
+      "auth": true
+    },
+    {
+      "path": "/api/health",
+      "targets": [
+        {"url": "http://product-service:3001"}
+      ]
+    },
+    {
+      "path": "/docs",
+      "staticFile": "docs.html",
+      "cache": true
+    },
+    {
+      "path": "/ws",
+      "targets": [
+        {"url": "http://websocket-service:6000"}
+      ]
+    }
+  ]
+}

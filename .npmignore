@@ -1,0 +1,48 @@
+# Development files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Development directories
+node_modules/
+.vscode/
+.idea/
+
+# TypeScript source (include in package for debugging)
+# src/
+
+# Test files
+test/
+tests/
+*.test.ts
+*.test.js
+*.spec.ts
+*.spec.js
+
+# Development configs
+.eslintrc*
+.prettierrc*
+tsconfig.json
+bun.lockb
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Documentation (keep README.md and ARCHITECTURE.md)
+docs/
+*.md
+!README.md
+!ARCHITECTURE.md
+
+# Local development
+config.json
+config.yaml
+config.yml
+static/

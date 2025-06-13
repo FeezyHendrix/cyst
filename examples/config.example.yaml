@@ -1,0 +1,122 @@
+port: 8080
+staticDir: "./static"
+
+# Security configuration
+security:
+  https:
+    cert: "./certs/server.crt"
+    key: "./certs/server.key"
+    port: 8443
+  basicAuth:
+    username: "admin"
+    password: "secure123"
+  ipWhitelist:
+    - "127.0.0.1"
+    - "192.168.1.0/24"
+  ipBlacklist:
+    - "10.0.0.5"
+  cors:
+    origins:
+      - "https://example.com"
+      - "https://app.example.com"
+      - "*"
+    methods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    headers:
+      - "Content-Type"
+      - "Authorization"
+      - "X-Requested-With"
+
+# Load balancer configuration
+loadBalancer:
+  algorithm: "least-connections"  # or "round-robin"
+  healthCheck:
+    enabled: true
+    interval: 30000  # 30 seconds
+    timeout: 5000    # 5 seconds
+    path: "/health"
+
+# Logging configuration
+logging:
+  accessLog: true
+  errorLog: true
+  format: "combined"  # or "common"
+  level: "info"
+
+# Global settings
+compression: true
+timeout: 30000    # 30 seconds
+retries: 2
+
+# Caching configuration
+cache:
+  enabled: true
+  maxAge: 300000  # 5 minutes
+
+# Rate limiting configuration
+rateLimit:
+  enabled: true
+  windowMs: 60000  # 1 minute
+  max: 100         # requests per window
+
+# Routes configuration
+routes:
+  # Path-based routing with load balancing
+  - path: "/api/products"
+    targets:
+      - url: "http://product-service:3001"
+        weight: 2
+      - url: "http://product-service-2:3001"
+        weight: 1
+    cors: true
+    cache: true
+    auth: false
+
+  # Host-based routing
+  - host: "api.example.com"
+    targets:
+      - url: "http://api-backend:4000"
+    cors: true
+    auth: true
+
+  # URL rewriting
+  - path: "/old-api"
+    targets:
+      - url: "http://new-api-service:5000"
+    rewrite: "/v2/api"
+    cors: true
+
+  # WebSocket support
+  - path: "/ws"
+    targets:
+      - url: "http://websocket-service:6000"
+
+  # Static file serving
+  - path: "/docs"
+    staticFile: "docs.html"
+    cache: true
+
+  # Health check endpoint
+  - path: "/api/health"
+    targets:
+      - url: "http://product-service:3001"
+      - url: "http://product-service-2:3001"
+
+  # Protected route with authentication
+  - path: "/admin"
+    targets:
+      - url: "http://admin-service:7000"
+    auth: true
+    cors: false
+
+  # High-traffic route with rate limiting
+  - path: "/public-api"
+    targets:
+      - url: "http://public-service:8000"
+    rateLimit: 50  # Override global rate limit
+    cache: true
+    cors: true

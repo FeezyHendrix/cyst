@@ -1,0 +1,23 @@
+# Use the official Bun image as the base image
+FROM oven/bun:1.0.0
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json, bun.lockb, and tsconfig.json (if available)
+COPY package.json bun.lockb tsconfig.json ./
+
+# Install dependencies using Bun
+RUN bun install
+
+# Copy only the product folder
+COPY services/auth ./services/auth
+
+# Build the TypeScript code
+RUN bun run tsc
+
+# Expose the port the app runs on
+EXPOSE 3000
+
+# Start the application
+CMD ["bun", "--watch", "services/auth/auth.gateway.service.ts"]
